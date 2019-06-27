@@ -1,5 +1,10 @@
 
 #include "micromouseserver.h"
+struct position{
+    int x;
+    int y;
+    int dir;
+};
 
 void microMouseServer::studentAI()
 {
@@ -21,5 +26,42 @@ void microMouseServer::studentAI()
  * void foundFinish();
  * void printUI(const char *mesg);
 */
+    static int timesRun=0;
+    static struct position myPos;
 
+    if(timesRun==0){
+        myPos.x=0;
+        myPos.y=0;
+
+    }
+
+    timesRun++;
+    static int timesTurnedLeft=0;
+
+    if(!isWallRight()){
+        turnRight();
+        moveForward();
+        timesTurnedLeft=0;
+    }
+    else if(!isWallForward()){
+        moveForward();
+         timesTurnedLeft=0;
+    }
+    else if (!isWallLeft()){
+        turnLeft();
+        moveForward();
+        timesTurnedLeft++;
+
+    }
+    else{
+        turnRight();
+        turnRight();
+        moveForward();
+        timesTurnedLeft=0;
+    }
+    if(timesTurnedLeft==3){
+        foundFinish();
+        timesTurnedLeft=0;
+    }
 }
+
